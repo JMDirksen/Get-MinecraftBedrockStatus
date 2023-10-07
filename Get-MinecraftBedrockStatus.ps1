@@ -27,7 +27,7 @@
         $socket.Client.SendTimeout = $Timeout
         $socket.Client.ReceiveTimeout = $Timeout
         $socket.Send($msg, $msg.Count, $endpoint) | Out-Null
-        $response = $socket.Receive([ref]$endpoint) 
+        $response = $socket.Receive([ref]$endpoint)
     }
     catch { throw "No response" }
     finally { $socket.Close() }
