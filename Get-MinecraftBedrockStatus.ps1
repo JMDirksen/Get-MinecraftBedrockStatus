@@ -8,7 +8,7 @@
     if ($Server -like "*:*") {
         $split = $Server -split ":"
         $Server = $split[0]
-        $Port = $split[1]
+        $Port = [int]$split[1]
     }
 
     $ip = Get-IPv4 $Server
@@ -34,23 +34,23 @@
     
     $fields = [Text.Encoding]::ASCII.GetString($response[35..$response.Length]).Split(";")
 
-    @{
+    [PSCustomObject]@{
         "Server"          = $Server
         "Port"            = $Port
         "IP"              = $ip
         "Edition"         = $fields[0]
         "ServerName"      = $fields[1]
-        "ProtocolVersion" = $fields[2]
+        "ProtocolVersion" = [int]$fields[2]
         "VersionName"     = $fields[3]
-        "PlayerCount"     = $fields[4]
-        "MaxPlayerCount"  = $fields[5]
+        "PlayerCount"     = [int]$fields[4]
+        "MaxPlayerCount"  = [int]$fields[5]
         "ServerUniqueID"  = $fields[6]
         "LevelName"       = $fields[7]
         "Gamemode"        = $fields[8]
-        "GamemodeID"      = $fields[9]
-        "PortIPv4"        = $fields[10]
-        "PortIPv6"        = $fields[11]
-        "unidentified"    = $fields[12..99] -join " "
+        "GamemodeID"      = [int]$fields[9]
+        "PortIPv4"        = [int]$fields[10]
+        "PortIPv6"        = [int]$fields[11]
+        "Unidentified"    = $fields[12..99] -join " "
     }
 }
 
@@ -60,5 +60,5 @@ function Get-IPv4 ([string]$HostnameOrIp) {
     try { $resolve = Resolve-DnsName $HostnameOrIp -Type A -ErrorAction Stop }
     catch { throw "Unable to resolve server name" }
     $resolve = $resolve | Where-Object { $_.Type -eq "A" } | Select-Object -First 1
-    return $resolve.Address
+    return [string]$resolve.Address
 }
