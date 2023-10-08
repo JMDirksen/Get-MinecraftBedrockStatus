@@ -32,7 +32,7 @@
     catch { throw "No response" }
     finally { $socket.Close() }
     
-    $fields = [Text.Encoding]::ASCII.GetString($response[35..$response.Length]).Split(";")
+    $fields = [Text.Encoding]::UTF8.GetString($response[35..$response.Length]).Split(";")
 
     [PSCustomObject]@{
         "Server"          = $Server
